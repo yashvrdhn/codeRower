@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update</title>
+  </head>
+  <body>
+    <div class="container d-grid place-items-center">
+      <div class="row my-auto">
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label for="get-config-id" class="form-label"
+              >Config to update(configId):</label
+            >
+            <input
+              type="text"
+              name="configId"
+              id="get-config-id"
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
+            <label for="update-config-remark" class="form-label">Remark</label>
+            <textarea
+              name="configRemark"
+              id="update-config-remark"
+              cols="30"
+              rows="10"
+            ></textarea>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="return updateData();"
+          >
+            Submit
+          </button>
+        </form>
+
+        <div id="result-area" style="display: none">
+          <h1>http://localhost:8080/api/configurations/</h1>
+          <div></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function updateData() {
+        const fdata = new FormData(document.forms[0]);
+        const configId = fdata.get("configId");
+        const remark = fdata.get("configRemark");
+
+        if (!configId || !remark) return;
+        const response = await fetch(
+          `http://localhost:8080/api/configurations/${configId}`,
+          {
+            body: JSON.stringify({ remark }),
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log((await response.json())["message"]);
+      }
+    </script>
+  </body>
+</html>
